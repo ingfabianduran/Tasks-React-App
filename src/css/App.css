@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600&display=swap');
+
+body {
+    background-color: #F4F9F4;
+    font-family: 'Oswald', sans-serif;
+}
+.app {
+    height: 100vh;
+}
+.button--primary {
+    background-color: #8AAE92;
+    border: none;
+}
+.button--primary:hover {
+    background-color: #8AAE92;
+    border: none;
+}
+.button--secondary {
+    background-color: #616161;
+    border: none;
+}
+.button--secondary:hover {
+    background-color: #616161;
+    border: none;
+}
