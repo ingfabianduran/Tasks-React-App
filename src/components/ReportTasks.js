@@ -1,16 +1,11 @@
 import React from 'react';
 import { Accordion, Badge, Container, Row, Col } from 'react-bootstrap';
 
-function ReportTask() {
-    const TYPES_TASKS = [
-        { id: 1, typeName: 'Incidente', totalCount: 120, countTrue: 60, countFalse: 60 },
-        { id: 2, typeName: 'Requerimiento', totalCount: 150, countTrue: 75, countFalse: 75 },
-    ];
-
+function ReportTask({typesTasks}) {
     return (
         <Accordion defaultActiveKey="0" className="shadow">
-            { TYPES_TASKS.map(item => (
-                <Accordion.Item key={item.id} eventKey={item.id} className="border-0">
+            { typesTasks.map(item => (
+                <Accordion.Item key={item.typeName} eventKey={item.typeName} className="border-0">
                     <Accordion.Header >
                         { item.typeName }
                     </Accordion.Header>

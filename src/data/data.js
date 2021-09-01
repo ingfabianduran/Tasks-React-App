@@ -11,11 +11,21 @@ const generateData = (count) => {
         });
     }
     return data;
-}
+};
 
 const showItemsForPage = (items, start = 0, end = 6) => {
     const ITEMS_FOR_PAGE = items.slice(start, end);
     return ITEMS_FOR_PAGE;
-}
+};
 
-export { generateData, showItemsForPage };
+const generateDataReport = (items, type) => {
+    const REPORT = {
+        typeName: type,
+        countTrue: items.filter(item => item.type === type && item.state).length,
+        countFalse: items.filter(item => item.type === type && !item.state).length,
+        totalCount: items.filter(item => item.type === type).length
+    };
+    return REPORT;
+};
+
+export { generateData, showItemsForPage, generateDataReport };

@@ -7,19 +7,11 @@ body {
 .app {
     height: 100vh;
 }
-.button--primary {
-    background-color: #8AAE92;
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #8AAE92 !important;
     border: none;
 }
-.button--primary:hover {
-    background-color: #8AAE92;
-    border: none;
-}
-.button--secondary {
-    background-color: #616161;
-    border: none;
-}
-.button--secondary:hover {
-    background-color: #616161;
+.btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
+    background-color: #616161 !important;
     border: none;
 }

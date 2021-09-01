@@ -2,13 +2,19 @@ import React from 'react';
 import { Card, ListGroup, Form, Button } from 'react-bootstrap';
 import { SearchTask } from './SearchTask';
 import { PaginationTasks } from './PaginationTasks';
-import { generateData, showItemsForPage } from '../data/data';
+import { showItemsForPage } from '../data/data';
 import '../css/ListTasks.css';
 
-function ListTasks() {
-    const GET_DATA = generateData(30);
-    const DATA = showItemsForPage(GET_DATA);
-    const NUMBER_PAGES = GET_DATA.length / 6;
+function ListTasks({tasks, setTasks}) {
+    const DATA = showItemsForPage(tasks);
+    const NUMBER_PAGES = tasks.length / 6;
+
+    const updateTask = (id) => {
+        console.log(`Item ${id} actualizado`);
+    };
+    const deleteTask = (id) => {
+        console.log(`Item ${id} eliminado`);
+    };
 
     return (
         <Card className="border-0 shadow">
@@ -21,13 +27,11 @@ function ListTasks() {
                                 <Form.Check 
                                     type="checkbox"
                                     className="me-2"
-                                    value={item.state}
-                                    checked={item.state ? item.state : false}
-                                    onChange={e => {}} />
+                                    onChange={() => updateTask(item.id)} />
                                 { item.description }
                             </div>
                             <div>
-                                <Button className="button--secondary">Delete</Button>
+                                <Button onClick={() => deleteTask(item.id)} variant="secondary">Delete</Button>
                             </div>
                         </ListGroup.Item>
                     )) }
