@@ -1,44 +1,102 @@
 import React from 'react';
-import { Card, ListGroup, Form, Button } from 'react-bootstrap';
+import { Card, ListGroup, Button } from 'react-bootstrap';
+import { SpinnerRoundOutlined } from 'spinners-react';
 import { SearchTask } from './SearchTask';
-import { PaginationTasks } from './PaginationTasks';
-import { showItemsForPage } from '../data/data';
+import { ListPagination } from './ListPagination';
+import { showItemsForPage, generateDataReport } from '../data/data';
+import { showAlert } from './Alert';
 import '../css/ListTasks.css';
 
-function ListTasks({tasks, setTasks}) {
-    const DATA = showItemsForPage(tasks);
-    const NUMBER_PAGES = tasks.length / 6;
+function ListTasks({tasks, setTasks, setReport}) {
+    const [search, setSearch] = React.useState('');
+    const [itemsForPages, setItemsForPage] = React.useState(showItemsForPage(tasks));
+    const [active, setActive] = React.useState(1);
+    const [isLoading, setIsLoading] = React.useState(false);
+    
+    let pages = tasks.length / 6;
+    let searchTasks = [];
+
+    if (search.length === 0) {
+        searchTasks = itemsForPages;
+    } else {
+        searchTasks = tasks.filter(task => {
+            const textTask = task.description.toLowerCase();
+            const inputText = search.toLowerCase();
+            return textTask.includes(inputText);
+        });
+        pages = searchTasks.length / 6;
+    }
 
     const updateTask = (id) => {
-        console.log(`Item ${id} actualizado`);
-    };
+        const INDEX_TASK = tasks.findIndex(item => {
+            return item.id === id;
+        });
+        const NEW_TASKS = [...tasks];
+        NEW_TASKS[INDEX_TASK].state = true;
+        setTasks(NEW_TASKS);
+        setReport([generateDataReport(tasks, 'Requerimiento'), generateDataReport(tasks, 'Incidente')]);
+        showAlert('Tarea actualizada');
+      };
+      
     const deleteTask = (id) => {
-        console.log(`Item ${id} eliminado`);
-    };
+        const INDEX_TASK = tasks.findIndex(item => {
+          return item.id === id;
+        });
+        const NEW_TASKS = [...tasks];
+        NEW_TASKS.splice(INDEX_TASK, 1);
+        setTasks(NEW_TASKS);
+        setItemsForPage(showItemsForPage(NEW_TASKS));
+        setReport([generateDataReport(NEW_TASKS, 'Requerimiento'), generateDataReport(NEW_TASKS, 'Incidente')]);
+        pages = tasks.length / 6;
+        showAlert('Tarea eliminada');
+      };
 
+    const changePage = (e) => {
+        setIsLoading(true);
+        const PAGE_SELECTED = parseInt(e.target.innerText);
+        const START = (6 * PAGE_SELECTED) - 6;
+        const END = (6 * PAGE_SELECTED);
+        setTimeout(() => {
+            setItemsForPage(showItemsForPage(tasks, START, END));
+            setIsLoading(false);
+        }, 2000);
+        setActive(PAGE_SELECTED);
+    };
+    
     return (
         <Card className="border-0 shadow">
             <Card.Body>
-                <SearchTask />
+                <SearchTask
+                    search={search}
+                    setSearch={setSearch} />
+                <div className="d-flex justify-content-center my-2">
+                    <SpinnerRoundOutlined enabled={isLoading} size={50} thickness={100} speed={80} color="#8AAE92"/>
+                </div>
                 <ListGroup>
-                    { DATA.map(item => (
+                    { searchTasks.map(item => (
                         <ListGroup.Item className="d-flex align-items-center justify-content-between" key={item.id}>
                             <div className="d-flex">
-                                <Form.Check 
-                                    type="checkbox"
+                                <Button
+                                    variant={item.state ? 'success' : 'danger'} 
+                                    type="button"
                                     className="me-2"
-                                    onChange={() => updateTask(item.id)} />
-                                { item.description }
+                                    size="sm"
+                                    disabled={item.state ? true : false}
+                                    onClick={() => updateTask(item.id)} >
+                                    ✓
+                                </Button>
+                                { item.description } - <span className="text-muted fst-italic">{ item.type }</span>
                             </div>
                             <div>
-                                <Button onClick={() => deleteTask(item.id)} variant="secondary">Delete</Button>
+                                <Button onClick={() => deleteTask(item.id)} variant="secondary" disabled={isLoading}>Delete</Button>
                             </div>
                         </ListGroup.Item>
                     )) }
                 </ListGroup>
-                <div className="d-flex justify-content-center">
-                    <PaginationTasks pages={NUMBER_PAGES} />
-                </div>
+                <ListPagination 
+                    pages={pages}
+                    active={active}
+                    changePage={changePage} />
             </Card.Body>
         </Card>
     );

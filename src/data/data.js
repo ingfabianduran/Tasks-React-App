@@ -21,8 +21,8 @@ const showItemsForPage = (items, start = 0, end = 6) => {
 const generateDataReport = (items, type) => {
     const REPORT = {
         typeName: type,
-        countTrue: items.filter(item => item.type === type && item.state).length,
-        countFalse: items.filter(item => item.type === type && !item.state).length,
+        countTrue: items.filter(item => item.type === type && !item.state).length,
+        countFalse: items.filter(item => item.type === type && item.state).length,
         totalCount: items.filter(item => item.type === type).length
     };
     return REPORT;

@@ -9,24 +9,22 @@ import './css/App.css';
 
 function App() {
   const [tasks, setTasks] = React.useState(generateData(30));
-  const TYPES_TASKS = [
-    generateDataReport(tasks, 'Requerimiento'), 
-    generateDataReport(tasks, 'Incidente')
-  ];
-  
+  const [report, setReport] = React.useState([generateDataReport(tasks, 'Requerimiento'), generateDataReport(tasks, 'Incidente')]);
+
   return (
     <React.Fragment>
       <Container>
         <Row className="app align-items-center">
           <Col md="7">
             <ReportTask 
-              typesTasks={TYPES_TASKS}/>
+              typesTasks={report}/>
             <FormTask />
           </Col>
           <Col md="5">
             <ListTasks
-              tasks={tasks}
-              setTasks={setTasks} />
+              tasks={tasks} 
+              setTasks={setTasks}
+              setReport={setReport} />
           </Col>
         </Row>
       </Container>
