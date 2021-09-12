@@ -27,16 +27,21 @@ function ListTasks({tasks, setTasks, setReport}) {
         pages = searchTasks.length / 6;
     }
 
+    const saveStateTasks = (newStateTasks) => {
+        localStorage.setItem('tasks', JSON.stringify(newStateTasks));
+        setTasks(newStateTasks);
+    };
+
     const updateTask = (id) => {
         const INDEX_TASK = tasks.findIndex(item => {
             return item.id === id;
         });
         const NEW_TASKS = [...tasks];
         NEW_TASKS[INDEX_TASK].state = true;
-        setTasks(NEW_TASKS);
+        saveStateTasks(NEW_TASKS);
         setReport([generateDataReport(tasks, 'Requerimiento'), generateDataReport(tasks, 'Incidente')]);
         showAlert('Tarea actualizada');
-      };
+    };
       
     const deleteTask = (id) => {
         const INDEX_TASK = tasks.findIndex(item => {
@@ -44,12 +49,12 @@ function ListTasks({tasks, setTasks, setReport}) {
         });
         const NEW_TASKS = [...tasks];
         NEW_TASKS.splice(INDEX_TASK, 1);
-        setTasks(NEW_TASKS);
+        saveStateTasks(NEW_TASKS);
         setItemsForPage(showItemsForPage(NEW_TASKS));
         setReport([generateDataReport(NEW_TASKS, 'Requerimiento'), generateDataReport(NEW_TASKS, 'Incidente')]);
         pages = tasks.length / 6;
         showAlert('Tarea eliminada');
-      };
+    };
 
     const changePage = (e) => {
         setIsLoading(true);

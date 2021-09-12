@@ -2,15 +2,20 @@ import faker from 'faker';
 
 const generateData = (count) => {
     let data = [];
-    for (let i = 0; i < count; i ++) {
-        data.push({
-            id: i + 1,
-            type: faker.random.arrayElement(['Incidente', 'Requerimiento']),
-            description: faker.lorem.word(),
-            state: faker.random.arrayElement([true, false])
-        });
+
+    if (!localStorage.getItem('tasks')) {
+        for (let i = 0; i < count; i ++) {
+            data.push({
+                id: i + 1,
+                type: faker.random.arrayElement(['Incidente', 'Requerimiento']),
+                description: faker.lorem.word(),
+                state: faker.random.arrayElement([true, false])
+            });
+        }
+        localStorage.setItem('tasks', JSON.stringify(data));
     }
-    return data;
+    
+    return JSON.parse(localStorage.getItem('tasks'));
 };
 
 const showItemsForPage = (items, start = 0, end = 6) => {
