@@ -3,15 +3,17 @@ import { Card, ListGroup, Button } from 'react-bootstrap';
 import { SpinnerRoundOutlined } from 'spinners-react';
 import { SearchTask } from './SearchTask';
 import { ListPagination } from './ListPagination';
+import { DataUser } from '../context/Context';
 import { showItemsForPage, generateDataReport } from '../data/data';
 import { showAlert } from './Alert';
 import '../css/ListTasks.css';
 
-function ListTasks({tasks, setTasks, setReport}) {
+function ListTasks({tasks, setTasks, setReport, isLoadingApp}) {
     const [search, setSearch] = React.useState('');
     const [itemsForPages, setItemsForPage] = React.useState(showItemsForPage(tasks));
     const [active, setActive] = React.useState(1);
     const [isLoading, setIsLoading] = React.useState(false);
+    const { user } = React.useContext(DataUser);
     
     let pages = tasks.length / 6;
     let searchTasks = [];
@@ -53,6 +55,7 @@ function ListTasks({tasks, setTasks, setReport}) {
         setItemsForPage(showItemsForPage(NEW_TASKS));
         setReport([generateDataReport(NEW_TASKS, 'Requerimiento'), generateDataReport(NEW_TASKS, 'Incidente')]);
         pages = tasks.length / 6;
+        isLoadingApp(true);
         showAlert('Tarea eliminada');
     };
 
@@ -77,6 +80,7 @@ function ListTasks({tasks, setTasks, setReport}) {
                 <div className="d-flex justify-content-center my-2">
                     <SpinnerRoundOutlined enabled={isLoading} size={50} thickness={100} speed={80} color="#8AAE92"/>
                 </div>
+                <h6 className="text-center">Tareas de { user.name }</h6>
                 <ListGroup>
                     { searchTasks.map(item => (
                         <ListGroup.Item className="d-flex align-items-center justify-content-between" key={item.id}>
