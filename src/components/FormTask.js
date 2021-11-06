@@ -28,6 +28,7 @@ function FormTask({ tasks, setTasks, setIsLoading }) {
         showAlert('Tarea Agregada Correctamente');
         setTasks(TASKS);
         setIsLoading(true);
+        localStorage.setItem('tasks', JSON.stringify(TASKS));
       }
   });
 

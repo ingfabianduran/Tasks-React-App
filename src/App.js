@@ -17,8 +17,9 @@ function App() {
   React.useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
+      setReport([generateDataReport(tasks, 'Incidente'), generateDataReport(tasks, 'Requerimiento')]);
     }, 2000);
-  }, [isLoading]);
+  }, [isLoading, tasks]);
 
   return (
     <ContextProvider>
